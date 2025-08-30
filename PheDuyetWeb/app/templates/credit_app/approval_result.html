@@ -1,0 +1,18 @@
+{% extends 'credit_app/base.html' %}
+
+{% block title %}Kết quả phê duyệt{% endblock %}
+
+{% block content %}
+    <h1>Kết quả Phê duyệt Tín dụng</h1>
+    {% if application %}
+        <div class="result-box {% if application.approval_result == 'Phê duyệt' or application.approval_result == 'Phê duyệt (Demo)' %}approved{% else %}rejected{% endif %}">
+            <p>Kết quả của bạn: <strong>{{ application.approval_result }}</strong></p>
+        </div>
+        <p style="margin-top: 20px;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+        <a href="{% url 'credit_application' %}" class="btn">Đăng ký mới</a>
+        <a href="{% url 'my_profile' %}" class="btn" style="background-color: #6c757d; margin-left: 15px;">Xem hồ sơ của tôi</a>
+    {% else %}
+        <p>Không tìm thấy đơn đăng ký nào. Vui lòng thử lại.</p>
+        <a href="{% url 'credit_application' %}" class="btn">Bắt đầu đăng ký</a>
+    {% endif %}
+{% endblock %}

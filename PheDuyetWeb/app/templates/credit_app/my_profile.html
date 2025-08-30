@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ của tôi</title>
+
+    <!-- Link to Bootstrap 5 CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* General body styling */
+        body {
+            background-color: #f8f9fa; /* A light grey background */
+            padding: 2rem;
+        }
+
+        /* The main content card */
+        .profile-card {
+            background: #ffffff;
+            padding: 2rem;
+            border: 1px solid #dee2e6;
+            /* Removed margin-left: 0; as the body padding handles spacing */
+        }
+
+        .profile-info {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-info p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+
+        .profile-applications h2 {
+            font-size: 1.5rem;
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+
+        /* Container for the table to make it scrollable on small screens */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.9rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+            white-space: normal; /* Allow text to wrap */
+        }
+
+        thead th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f3f5;
+        }
+
+        .btn-create-new {
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+        <div class="profile-info">
+            <h1>Hồ sơ của {{ user.username }}</h1>
+            <p><strong>Tên người dùng:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+
+        <div class="profile-applications">
+            <h2>Các đơn đăng ký của bạn</h2>
+            {% if applications %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Giới tính</th>
+                                <th>Tuổi</th>
+                                <th>Nợ</th>
+                                <th>Hôn nhân</th>
+                                <th>KH Ngân hàng</th>
+                                <th>Ngành</th>
+                                <th>Sắc tộc</th>
+                                <th>Năm LV</th>
+                                <th>Nợ xấu</th>
+                                <th>Có việc</th>
+                                <th>Điểm TC</th>
+                                <th>GPLX</th>
+                                <th>Công dân</th>
+                                <th>Mã Zip</th>
+                                <th>Thu nhập</th>
+                                <th>Kết quả</th>
+                                <th>Thời gian</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                                <tr>
+                                    <td>{{ app.id }}</td>
+                                    <td>{% if app.gender %}Nam{% else %}Nữ{% endif %}</td>
+                                    <td>{{ app.age }}</td>
+                                    <td>{{ app.debt }}</td>
+                                    <td>{% if app.married %}Đã kết hôn{% else %}Độc thân{% endif %}</td>
+                                    <td>{% if app.bank_customer %}Có{% else %}Không{% endif %}</td>
+                                    <td>{{ app.get_industry_display }}</td>
+                                    <td>{{ app.get_ethnicity_display }}</td>
+                                    <td>{{ app.years_employed }}</td>
+                                    <td>{% if app.prior_default %}Có{% else %}Không{% endif %}</td>
+                                    <td>{% if app.employed %}Có{% else %}Không{% endif %}</td>
+                                    <td>{{ app.credit_score }}</td>
+                                    <td>{% if app.drivers_license %}Có{% else %}Không{% endif %}</td>
+                                    <td>{{ app.get_citizen_display }}</td>
+                                    <td>{{ app.zip_code }}</td>
+                                    <td>{{ app.income }}</td>
+                                    <td><strong>{{ app.approval_result }}</strong></td>
+                                    <td>{{ app.created_at|date:"d/m/Y H:i" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>Bạn chưa có đơn đăng ký nào.</p>
+            {% endif %}
+        </div>
+        <a href="{% url 'credit_application' %}" class="btn btn-primary btn-create-new">Tạo đơn đăng ký mới</a>
+    </div>
+
+</body>
+</html>

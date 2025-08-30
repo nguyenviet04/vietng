@@ -1,0 +1,35 @@
+{% extends 'credit_app/base.html' %}
+
+{% block title %}Điền thông tin{% endblock %}
+
+{% block content %}
+    <h1>Điền thông tin lý lịch của bạn</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                {% if field.widget_type == 'radio' %}
+                    <div class="radio-options">
+                        {% for radio in field %}
+                            {{ radio }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ field }}
+                {% endif %}
+                {% if field.help_text %}
+                    <small style="display: block; color: #666; margin-top: 5px;">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="form-errors">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn">Phê duyệt</button>
+    </form>
+{% endblock %}

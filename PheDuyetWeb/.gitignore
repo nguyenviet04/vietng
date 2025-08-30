@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Cơ sở dữ liệu SQLite
+db.sqlite3
+
+# Môi trường ảo
+venv/
+env/
+
+# Static files
+/static/
+/media/
+
+# IDE settings
+.idea/
+.vscode/
+
+# Tệp môi trường bí mật
+.env

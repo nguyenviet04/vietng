@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Credit Approval{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #007bff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .navbar .logo small {
+            font-size: 14px;
+            display: block;
+            margin-top: 2px;
+            opacity: 0.8;
+        }
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .navbar ul li {
+            margin-left: 25px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .navbar ul li a:hover,
+        .navbar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        .card h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .card p {
+            color: #555;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Form styling */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="password"],
+        .form-group input[type="email"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group input[type="password"]:focus,
+        .form-group input[type="email"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .form-group .radio-options label {
+            display: inline-block;
+            margin-right: 20px;
+            font-weight: normal;
+        }
+        .form-group .radio-options input[type="radio"] {
+            margin-right: 5px;
+        }
+        .form-errors {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: left;
+        }
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        .messages li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #d4edda; /* Success */
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            text-align: left;
+        }
+        .messages li.error {
+            background-color: #f8d7da; /* Danger */
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .messages li.warning {
+            background-color: #fff3cd; /* Warning */
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .profile-info p {
+            text-align: left;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .profile-applications table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .profile-applications th,
+        .profile-applications td {
+            border: 1px solid #eee;
+            padding: 10px;
+            text-align: left;
+        }
+        .profile-applications th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+        }
+        .result-box {
+            background-color: #e9ecef;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .result-box.approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .result-box.rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            CREDIT APPROVAL
+            <small>power by N26</small>
+        </div>
+        <ul>
+            <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'my_profile' %}" class="{% if request.resolver_match.url_name == 'my_profile' %}active{% endif %}">My profile</a></li>
+                <li><a href="{% url 'credit_application' %}" class="{% if request.resolver_match.url_name == 'credit_application' %}active{% endif %}">Apply Credit</a></li>
+                <li><a href="#">Welcome, {{ user.username }}</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
+            {% else %}
+                <li><a href="{% url 'signup' %}" class="{% if request.resolver_match.url_name == 'signup' %}active{% endif %}">Sign Up</a></li>
+                <li><a href="{% url 'login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

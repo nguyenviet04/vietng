@@ -1,0 +1,31 @@
+{% extends 'credit_app/base.html' %}
+
+{% block title %}Đăng nhập{% endblock %}
+
+{% block content %}
+    <h1>Đăng nhập</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="form-errors">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {% if form.non_field_errors %}
+            <div class="form-errors">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <button type="submit" class="btn">Đăng nhập</button>
+    </form>
+{% endblock %}
